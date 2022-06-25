@@ -1,0 +1,65 @@
+/* eslint-disable @next/next/no-img-element */
+import Link from "next/link";
+
+const Container = ({
+  children,
+  isClickable,
+  lotteryId,
+}: {
+  children: React.ReactNode;
+  isClickable?: boolean;
+  lotteryId: string;
+}) =>
+  isClickable ? (
+    <Link href={`/listing/${lotteryId}`} passHref>
+      <a className="my-3 mx-4 w-60 flex flex-col pb-6 rounded-[32px] h-[420px] overflow-hidden shadow-md hover:scale-[1.03] cursor-pointer transition-transform">
+        {children}
+      </a>
+    </Link>
+  ) : (
+    <div className="my-3 mx-4 w-60 flex flex-col h-[420px] pb-6 rounded-[32px] overflow-hidden shadow-md">
+      {children}
+    </div>
+  );
+
+const LotteryCardPreview = ({
+  itemName,
+  timeStamp,
+  imageUrl,
+  lotteryId,
+  isClickable,
+}: {
+  itemName: string;
+  timeStamp: string;
+  imageUrl: string;
+  lotteryId: string;
+  isClickable?: boolean;
+}) => {
+  return (
+    <Container isClickable={isClickable} lotteryId={lotteryId}>
+      <img
+        alt="Optipunk #9075"
+        src={imageUrl}
+        className="w-full text-ellipsis"
+      />
+      <h1 className="px-4 mt-4 font-semibold text-2xl whitespace-nowrap text-ellipsis overflow-hidden">
+        {itemName}
+      </h1>
+      <h2 className="font-medium text-lg px-4 text-gray-500">
+        Expires in 24 minutes
+      </h2>
+      <div className="h-6" />
+      <h2 className="font-medium text-xl px-4 text-gray-500">Listed at</h2>
+      <div className="px-4 flex items-center">
+        <h2 className="font-medium text-2xl">0.1 ETH</h2>
+        <img
+          className="h-6 w-6 ml-2"
+          alt="Optimism Ethereum Logo"
+          src="/assets/op_eth.png"
+        />
+      </div>
+    </Container>
+  );
+};
+
+export default LotteryCardPreview;
