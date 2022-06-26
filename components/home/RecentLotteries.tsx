@@ -15,7 +15,15 @@ const RecentLottery = () => {
 
   const color = status === "Flipped" ? "text-red-500" : "";
   return (
-    <tr className="border-b border-gray-600">
+    <tr
+      onClick={() => {
+        window.open(
+          "https://optimistic.etherscan.io/tx/0xf4419c78d8028ef6582df2afe4588ba004907b1c0ecf10df6917ddf1d65d8812",
+          "_blank"
+        );
+      }}
+      className="border-b border-gray-600 cursor-pointer transition-transform hover:scale-[1.02]"
+    >
       <td className="flex flex-row items-center font-semibold text-lg">
         <img
           alt="Optipunk # 9454"

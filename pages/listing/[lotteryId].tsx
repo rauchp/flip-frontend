@@ -5,6 +5,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ActionButton from "../../components/general/ActionButton";
+import Glow from "../../components/general/Glow";
 import Header from "../../components/general/Header";
 import LotteryCardPreview from "../../components/general/LotteryCardPreview";
 
@@ -17,7 +18,7 @@ const LotteryPageRevealReady = () => {
   const onClick = () => {};
 
   return (
-    <div className="h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
+    <div className="bg-white h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
       <h1 className="font-semibold text-2xl">Lottery Info</h1>
       <h2 className="font-medium mt-3">
         Listed by{": "}
@@ -54,7 +55,7 @@ const LotterPageActive = ({ totalPrice }: { totalPrice: number }) => {
   // TODO: Add from ABI
   const onClick = () => {};
   return (
-    <div className="h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
+    <div className="bg-white h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
       <h1 className="font-semibold text-2xl">Lottery Info</h1>
       <h2 className="font-medium mt-3">
         Listed by{": "}
@@ -105,7 +106,7 @@ const LotteryPage: NextPage = () => {
   const router = useRouter();
   const { lotteryId } = router.query;
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative">
       <Head>
         <title>Lotta Flips - Lottery #{lotteryId}</title>
         <meta name="description" content="You feelin' lucky?" />
@@ -121,6 +122,7 @@ const LotteryPage: NextPage = () => {
         />
         <LotteryPageInfo />
       </div>
+      <Glow />
     </div>
   );
 };

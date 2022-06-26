@@ -9,6 +9,7 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import "@reach/dialog/styles.css";
 import { animated, useTransition } from "@react-spring/web";
 import ActionButton from "../components/general/ActionButton";
+import Glow from "../components/general/Glow";
 
 const OPTIPUNK_COLLECTION_LOGO =
   "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Foptipunkgif.b34a680b_vBX64As.gif&w=3840&q=75";
@@ -121,7 +122,7 @@ const CollectionItem = ({
       onRender={(onClick: any) => (
         <div
           onClick={onClick}
-          className="my-3 mx-4 w-60 flex flex-col pb-6 rounded-[32px] h-[420px] overflow-hidden shadow-md hover:scale-[1.03] cursor-pointer transition-transform"
+          className="bg-white my-3 mx-4 w-60 flex flex-col pb-6 rounded-[32px] h-[420px] overflow-hidden shadow-md hover:scale-[1.03] cursor-pointer transition-transform"
         >
           <img
             alt="Optipunks"
@@ -139,9 +140,9 @@ const CollectionItem = ({
 
 const ListPage: NextPage = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative">
       <Head>
-        <title>Lotta Flips</title>
+        <title>Lotta Flips | List</title>
         <meta name="description" content="You feelin' lucky?" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -159,6 +160,7 @@ const ListPage: NextPage = () => {
           />
         </div>
       </div>
+      <Glow />
     </div>
   );
 };

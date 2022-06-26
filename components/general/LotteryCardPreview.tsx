@@ -12,12 +12,12 @@ const Container = ({
 }) =>
   isClickable ? (
     <Link href={`/listing/${lotteryId}`} passHref>
-      <a className="my-3 mx-4 w-60 flex flex-col pb-6 rounded-[32px] h-[420px] overflow-hidden shadow-md hover:scale-[1.03] cursor-pointer transition-transform">
+      <a className="my-3 mx-4 w-60 bg-white flex flex-col pb-6 rounded-[32px] h-[420px] overflow-hidden shadow-md hover:scale-[1.03] cursor-pointer transition-transform">
         {children}
       </a>
     </Link>
   ) : (
-    <div className="my-3 mx-4 w-60 flex flex-col h-[420px] pb-6 rounded-[32px] overflow-hidden shadow-md">
+    <div className="my-3 mx-4 w-60 bg-white flex flex-col h-[420px] pb-6 rounded-[32px] overflow-hidden shadow-md">
       {children}
     </div>
   );

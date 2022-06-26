@@ -1,13 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import type { NextPage } from "next";
 import Head from "next/head";
+import Glow from "../components/general/Glow";
 import Header from "../components/general/Header";
 import RecentListings from "../components/home/RecentListings";
 import RecentLotteries from "../components/home/RecentLotteries";
 
 const Home: NextPage = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative">
       <Head>
         <title>Lotta Flips</title>
         <meta name="description" content="You feelin' lucky?" />
@@ -22,6 +23,7 @@ const Home: NextPage = () => {
       <RecentListings />
       <RecentLotteries />
       <div className="h-64" />
+      <Glow />
     </div>
   );
 };
