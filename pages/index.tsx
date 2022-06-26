@@ -3,6 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Header from "../components/general/Header";
 import RecentListings from "../components/home/RecentListings";
+import RecentLotteries from "../components/home/RecentLotteries";
 
 const Home: NextPage = () => {
   return (
@@ -19,6 +20,8 @@ const Home: NextPage = () => {
         Select an NFT.
       </h1>
       <RecentListings />
+      <RecentLotteries />
+      <div className="h-64" />
     </div>
   );
 };
