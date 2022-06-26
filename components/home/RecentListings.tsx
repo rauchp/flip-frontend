@@ -1,8 +1,6 @@
 import LotteryCardPreview from "../general/LotteryCardPreview";
 
 /* eslint-disable @next/next/no-img-element */
-const OPTIPUNK_COLLECTION_LOGO =
-  "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Foptipunkgif.b34a680b_vBX64As.gif&w=3840&q=75";
 
 const OPTIPUNK_9075 =
   "https://quixotic.io/_next/image?url=https%3A%2F%2Fipfs.quixotic.io%2Fipfs%2FQmbAhtqQqiSQqwCwQgrRB6urGc3umTskiuVpgX7FvHhutU%2F4330.png&w=3840&q=75";
