@@ -5,11 +5,15 @@ import LotteryCardPreview from "../general/LotteryCardPreview";
 const OPTIPUNK_9075 =
   "https://quixotic.io/_next/image?url=https%3A%2F%2Fipfs.quixotic.io%2Fipfs%2FQmbAhtqQqiSQqwCwQgrRB6urGc3umTskiuVpgX7FvHhutU%2F4330.png&w=3840&q=75";
 
-const RecentLottery = () => {
-  const listingPrice = 0.2;
-  const lotteryAt = 0.1;
-
-  const name = "Optipunk #132";
+const RecentLottery = ({
+  itemName,
+  listingPrice,
+  lotteryAt,
+}: {
+  itemName: string;
+  listingPrice: number;
+  lotteryAt: number;
+}) => {
   const imageUrl = OPTIPUNK_9075;
   const status = "Flipped"; // Flipped or Safe
 
@@ -30,7 +34,7 @@ const RecentLottery = () => {
           className="h-16 w-16 mr-2 rounded-lg my-3"
           src={imageUrl}
         />
-        {name}
+        {itemName}
       </td>
       <td className="font-medium text-lg">{lotteryAt.toFixed(3)} ETH</td>
       <td className="font-medium text-lg">{listingPrice.toFixed(3)} ETH</td>
@@ -54,8 +58,16 @@ const RecentLotteries = () => {
             </tr>
           </thead>
           <tbody className="border-t border-gray-600">
-            <RecentLottery />
-            <RecentLottery />
+            <RecentLottery
+              itemName="Optipunk #132"
+              listingPrice={0.2}
+              lotteryAt={0.1}
+            />
+            <RecentLottery
+              itemName="Optipunk #166"
+              listingPrice={0.225}
+              lotteryAt={0.125}
+            />
           </tbody>
         </table>
       </div>

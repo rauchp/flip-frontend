@@ -40,17 +40,6 @@
         "internalType": "uint256",
         "name": "prod1",
         "type": "uint256"
-      }
-    ],
-    "name": "PRBMath__MulDivFixedPointOverflow",
-    "type": "error"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "prod1",
-        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -59,6 +48,11 @@
       }
     ],
     "name": "PRBMath__MulDivOverflow",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "PriceTooLow",
     "type": "error"
   },
   {
@@ -157,6 +151,51 @@
   },
   {
     "inputs": [],
+    "name": "allActiveListings",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "lister",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "bidder",
+            "type": "address"
+          },
+          {
+            "internalType": "uint64",
+            "name": "listPrice",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "bidPrice",
+            "type": "uint64"
+          },
+          {
+            "internalType": "uint64",
+            "name": "expirationTimestamp",
+            "type": "uint64"
+          },
+          {
+            "internalType": "enum LottaFlips.LotteryStatus",
+            "name": "status",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct LottaFlips.Listing[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "collection",
     "outputs": [
       {
@@ -187,6 +226,19 @@
       }
     ],
     "name": "createLottery",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "deleteListing",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -365,6 +417,19 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "totalListings",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",

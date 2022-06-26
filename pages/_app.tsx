@@ -7,7 +7,7 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [chain.optimismKovan],
+  [chain.optimism],
   [
     alchemyProvider({
       // This is Alchemy's default API key.

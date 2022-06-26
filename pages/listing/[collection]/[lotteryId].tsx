@@ -1,14 +1,21 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
+import { BigNumber, ethers } from "ethers";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useAccount } from "wagmi";
-import ActionButton from "../../components/general/ActionButton";
-import Glow from "../../components/general/Glow";
-import Header from "../../components/general/Header";
-import LotteryCardPreview from "../../components/general/LotteryCardPreview";
+import { useAccount, useContractRead } from "wagmi";
+import ActionButton from "../../../components/general/ActionButton";
+import Glow from "../../../components/general/Glow";
+import Header from "../../../components/general/Header";
+import LotteryCardPreview from "../../../components/general/LotteryCardPreview";
+import ABI from "../../../public/assets/ABI.json";
+import {
+  CleanData,
+  CollectionInfo,
+  convertRawDataToCleanData,
+} from "../../../utils/GeneralUtils";
 
 const SERVER_URL = "https://flip-server-production.up.railway.app/";
 
@@ -32,7 +39,7 @@ const LotteryPageSelf = () => {
   );
 };
 
-const LotteryPageRevealReady = () => {
+const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
   const [loading, setLoading] = useState(false);
   const { data: account } = useAccount();
   const disabled = loading || !account;
@@ -42,10 +49,9 @@ const LotteryPageRevealReady = () => {
     buttonText = "Loading...";
   }
 
-  // TODO: Unhardcode.
-  const minterAddress = "0x0000000000000000000000000000000000000000";
+  const minterAddress = cleanData.from;
+  const betterAddress = cleanData.bidder;
 
-  const betterAddress = "0x0000000000000000000000000000000000000000";
   // TODO: Add from ABI
   const onClick = () => {
     setLoading(true);
@@ -87,10 +93,10 @@ const LotteryPageRevealReady = () => {
     </div>
   );
 };
-const LotterPageActive = ({ totalPrice }: { totalPrice: number }) => {
-  const [value, setValue] = useState(totalPrice / 2 + "");
+const LotterPageActive = ({ totalPrice }: { totalPrice: string }) => {
+  const [value, setValue] = useState(parseFloat(totalPrice) / 2 + "");
 
-  const rawValue = parseFloat(value) / totalPrice;
+  const rawValue = parseFloat(value) / parseFloat(totalPrice);
   const pct = (rawValue * 100).toFixed(2);
 
   const showErrorText = rawValue < 0.1 || rawValue > 0.5;
@@ -136,35 +142,49 @@ const LotterPageActive = ({ totalPrice }: { totalPrice: number }) => {
   );
 };
 
-const LotteryPageInfo = () => {
+const LotteryPageInfo = ({ cleanData }: { cleanData: CleanData }) => {
   const { data: account } = useAccount();
 
-  // TODO: Unhardcode.
-  const totalPrice = 0.1;
+  const totalPrice = cleanData.listPrice;
 
-  // TODO: Unhardcode.
-  // 'active' | 'readyToReveal'
-  const state = "active";
-
-  // TODO: Unhardcode.
-  const minterAddress = "0x0000000000000000000000000000000000000000";
+  const minterAddress = cleanData.from;
 
   const isOwn = account?.address === minterAddress;
 
-  // if (true) {
-  if (isOwn && state === "active") {
+  if (isOwn && cleanData.status === "active") {
     return <LotteryPageSelf />;
   }
 
-  if (state === "readyToReveal") {
-    return <LotteryPageRevealReady />;
+  if (cleanData.status === "readyToReveal") {
+    return <LotteryPageRevealReady cleanData={cleanData} />;
   }
 
   return <LotterPageActive totalPrice={totalPrice} />;
 };
 const LotteryPage: NextPage = () => {
   const router = useRouter();
-  const { lotteryId } = router.query;
+  const { lotteryId, collection } = router.query;
+
+  const collectionName = String(collection);
+  const collectionData = CollectionInfo[collectionName];
+
+  const { data: rawData } = useContractRead(
+    {
+      addressOrName: collectionData?.proxyAddress,
+      contractInterface: ABI,
+    },
+    "listings",
+    {
+      args: lotteryId,
+    }
+  );
+
+  if (!rawData) {
+    return <div />;
+  }
+
+  const cleanData = convertRawDataToCleanData(rawData);
+
   return (
     <div className="flex flex-col min-h-screen relative">
       <Head>
@@ -178,12 +198,13 @@ const LotteryPage: NextPage = () => {
         className="h-full w-full flex items-center justify-center flex-col lg:flex-row"
       >
         <LotteryCardPreview
-          lotteryId="2"
-          imageUrl="https://quixotic.infura-ipfs.io/ipfs/QmS7rPmj3vA32ZQmixG8XEkirtFvxVWtaR1a3ZEW8KNMJf"
-          itemName="Apetimism #2903"
-          timeStamp={new Date().getTime() + 1000000}
+          lotteryId={cleanData.tokenId}
+          imageUrl={CollectionInfo[collectionName].logo}
+          itemName={cleanData.itemName}
+          timeStamp={cleanData.timeStamp}
+          listPrice={cleanData.listPrice}
         />
-        <LotteryPageInfo />
+        <LotteryPageInfo cleanData={cleanData} />
       </div>
       <Glow />
     </div>
