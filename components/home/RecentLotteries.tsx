@@ -20,7 +20,7 @@ const RecentLottery = ({
     <tr
       onClick={() => {
         window.open(
-          "https://optimistic.etherscan.io/tx/0xf4419c78d8028ef6582df2afe4588ba004907b1c0ecf10df6917ddf1d65d8812",
+          "https://optimistic.etherscan.io/tx/0x5f2d0105cbefac5c78575edc72c5df65a3a7a1289420447a665b778834fc07bf",
           "_blank"
         );
       }}
