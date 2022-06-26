@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { getTimeDifference } from "../../utils/TimeUtils";
 
 const Container = ({
   children,
@@ -30,11 +31,13 @@ const LotteryCardPreview = ({
   isClickable,
 }: {
   itemName: string;
-  timeStamp: string;
+  timeStamp: number;
   imageUrl: string;
   lotteryId: string;
   isClickable?: boolean;
 }) => {
+  const timeAgo = getTimeDifference(timeStamp);
+
   return (
     <Container isClickable={isClickable} lotteryId={lotteryId}>
       <img
@@ -46,7 +49,7 @@ const LotteryCardPreview = ({
         {itemName}
       </h1>
       <h2 className="font-medium text-lg px-4 text-gray-500">
-        Expires in 24 minutes
+        Expires in {timeAgo}
       </h2>
       <div className="h-6" />
       <h2 className="font-medium text-xl px-4 text-gray-500">Listed at</h2>

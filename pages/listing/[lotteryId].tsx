@@ -9,13 +9,26 @@ import Glow from "../../components/general/Glow";
 import Header from "../../components/general/Header";
 import LotteryCardPreview from "../../components/general/LotteryCardPreview";
 
+const SERVER_URL = "https://flip-server-production.up.railway.app/";
 const LotteryPageRevealReady = () => {
+  const [loading, setLoading] = useState(false);
+
+  const disabled = loading;
+  const buttonText = loading ? "Loading..." : "Reveal";
   // TODO: Unhardcode.
   const minterAddress = "0x0000000000000000000000000000000000000000";
 
   const betterAddress = "0x0000000000000000000000000000000000000000";
   // TODO: Add from ABI
-  const onClick = () => {};
+  const onClick = () => {
+    setLoading(true);
+    fetch(SERVER_URL)
+      .then((res) => res.text())
+      .then((text) => {
+        console.log(text);
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="bg-white h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
@@ -37,7 +50,7 @@ const LotteryPageRevealReady = () => {
         lottery to see the result.
       </p>
       <div className="flex-grow" />
-      <ActionButton onClick={onClick} text="Reveal" disabled={false} />
+      <ActionButton onClick={onClick} text={buttonText} disabled={disabled} />
     </div>
   );
 };
@@ -118,7 +131,7 @@ const LotteryPage: NextPage = () => {
           lotteryId="2"
           imageUrl="https://quixotic.infura-ipfs.io/ipfs/QmS7rPmj3vA32ZQmixG8XEkirtFvxVWtaR1a3ZEW8KNMJf"
           itemName="Apetimism #2903"
-          timeStamp=""
+          timeStamp={new Date().getTime() + 1000000}
         />
         <LotteryPageInfo />
       </div>

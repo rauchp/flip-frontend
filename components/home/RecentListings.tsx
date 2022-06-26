@@ -15,14 +15,14 @@ const RecentListings = () => {
           lotteryId="1"
           imageUrl={OPTIPUNK_9075}
           itemName="Optipunk #9075"
-          timeStamp=""
+          timeStamp={new Date().getTime() + 100000}
         />
         <LotteryCardPreview
           isClickable
           lotteryId="2"
           imageUrl="https://quixotic.infura-ipfs.io/ipfs/QmS7rPmj3vA32ZQmixG8XEkirtFvxVWtaR1a3ZEW8KNMJf"
           itemName="Apetimism #2903"
-          timeStamp=""
+          timeStamp={new Date().getTime() + 1000000}
         />
         {/* <RecentCard itemName="Optipunk #9075" timeStamp="" />
         <RecentCard itemName="Optipunk #9075" timeStamp="" /> */}
