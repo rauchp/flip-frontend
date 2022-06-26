@@ -1,5 +1,3 @@
-import LotteryCardPreview from "../general/LotteryCardPreview";
-
 /* eslint-disable @next/next/no-img-element */
 
 const OPTIPUNK_9075 =

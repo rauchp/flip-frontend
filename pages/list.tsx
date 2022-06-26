@@ -10,7 +10,10 @@ import "@reach/dialog/styles.css";
 import { animated, useTransition } from "@react-spring/web";
 import ActionButton from "../components/general/ActionButton";
 import Glow from "../components/general/Glow";
-import { useAccount } from "wagmi";
+import { useAccount, useContractWrite } from "wagmi";
+import { CollectionInfo } from "../utils/GeneralUtils";
+import ABI from "../public/assets/ABI.json";
+import { BigNumber, ethers } from "ethers";
 
 const OPTIPUNK_COLLECTION_LOGO =
   "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Foptipunkgif.b34a680b_vBX64As.gif&w=3840&q=75";
@@ -24,7 +27,15 @@ function getFinalTimeStamp(hoursOffset: number) {
   return time.getTime() + timeMS;
 }
 
-function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
+function Modal({
+  onRender,
+  imageUrl,
+  collectionType,
+}: {
+  onRender: any;
+  imageUrl: string;
+  collectionType: string;
+}) {
   const AnimatedDialogOverlay = animated(DialogOverlay);
   const AnimatedDialogContent = animated(DialogContent);
   const [loading, setLoading] = useState(false);
@@ -46,7 +57,16 @@ function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
   });
 
   const [listPrice, setListPrice] = useState("0.1");
+  const [tokenId, setTokenId] = useState(0);
   const [expirtyHours, setExpirtyHours] = useState("2");
+
+  const { write: createLottery } = useContractWrite(
+    {
+      addressOrName: CollectionInfo[collectionType].proxyAddress,
+      contractInterface: ABI,
+    },
+    "createLottery"
+  );
 
   const onClick = () => {
     setLoading(true);
@@ -66,6 +86,13 @@ function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
       return;
     }
 
+    createLottery({
+      args: [
+        tokenId,
+        ethers.utils.parseUnits(String(price)),
+        BigNumber.from(timeStamp),
+      ],
+    });
     setLoading(false);
   };
   return (
@@ -95,7 +122,7 @@ function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
                   <img
                     alt="Yeet."
                     src={imageUrl}
-                    className="h-60 w-60 rounded-2xl"
+                    className="h-72 w-72 rounded-2xl"
                   />
                   <div className="flex flex-col">
                     <h1 className="px-4 font-semibold text-2xl mb-3">
@@ -108,6 +135,15 @@ function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
                         onChange={(e) => setListPrice(e.target.value)}
                       />
                       <p className="font-medium text-xl ml-2">ETH</p>
+                    </div>
+                    <div className="flex-grow min-h-[4px]" />
+                    <div className="ml-4 flex justify-start items-center">
+                      <input
+                        className="bg-gray-400 px-3 py-2 rounded-xl text-center text-xl font-semibold w-16"
+                        value={tokenId}
+                        onChange={(e) => setTokenId(e.target.value)}
+                      />
+                      <p className="font-medium text-xl ml-2">Token Id</p>
                     </div>
                     <div className="flex-grow min-h-[4px]" />
                     <div className="ml-4 flex justify-start items-center">
@@ -148,6 +184,7 @@ const CollectionItem = ({
 }) => {
   return (
     <Modal
+      collectionType={collectionName}
       imageUrl={imageUrl}
       onRender={(onClick: any) => (
         <div
@@ -181,7 +218,7 @@ const ListPage: NextPage = () => {
         <h1 className="text-3xl font-bold mb-4 ml-4">List an NFT</h1>
         <div className="h-full w-full flex items-center justify-center flex-col lg:flex-row">
           <CollectionItem
-            collectionName="Optipunks"
+            collectionName="Optipunk"
             imageUrl={OPTIPUNK_COLLECTION_LOGO}
           />
           <CollectionItem

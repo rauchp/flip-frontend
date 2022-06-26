@@ -3,6 +3,7 @@ import LotteryCardPreview from "../general/LotteryCardPreview";
 import ABI from "../../public/assets/ABI.json";
 import { useEffect, useState } from "react";
 import {
+  CleanData,
   CollectionInfo,
   convertRawDataToCleanData,
 } from "../../utils/GeneralUtils";
@@ -53,7 +54,7 @@ const RecentListings = () => {
     <div className="self-center mt-16  lg:min-w-[1024px]">
       <h1 className="text-3xl font-bold mb-4 ml-4">Recent Listings</h1>
       <div className="flex flex-col lg:flex-row items-center flex-wrap">
-        {finalData.map((item) => {
+        {finalData.map((item: CleanData) => {
           return (
             <LotteryCardPreview
               key={item.itemName}
@@ -63,6 +64,7 @@ const RecentListings = () => {
               imageUrl={CollectionInfo[item.collectionType].logo}
               itemName={item.itemName}
               timeStamp={item.timeStamp}
+              listPrice={item.listPrice}
             />
           );
         })}

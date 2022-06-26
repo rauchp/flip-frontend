@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable react/no-unescaped-entities */
 import { BigNumber, ethers } from "ethers";
+import { arrayify } from "ethers/lib/utils";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useAccount, useContractRead } from "wagmi";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 import ActionButton from "../../../components/general/ActionButton";
 import Glow from "../../../components/general/Glow";
 import Header from "../../../components/general/Header";
@@ -44,6 +45,14 @@ const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
   const { data: account } = useAccount();
   const disabled = loading || !account;
 
+  const { write: settleLottery } = useContractWrite(
+    {
+      addressOrName: CollectionInfo[cleanData.collectionType].proxyAddress,
+      contractInterface: ABI,
+    },
+    "settleLottery"
+  );
+
   let buttonText = account ? "Reveal" : "Connect Wallet";
   if (loading) {
     buttonText = "Loading...";
@@ -52,7 +61,6 @@ const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
   const minterAddress = cleanData.from;
   const betterAddress = cleanData.bidder;
 
-  // TODO: Add from ABI
   const onClick = () => {
     setLoading(true);
     if (!account) {
@@ -61,10 +69,14 @@ const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
       return;
     }
 
-    fetch(SERVER_URL)
+    const urlToFetch = `${SERVER_URL}/${cleanData.collectionType}/${cleanData.tokenId}`;
+
+    fetch(urlToFetch)
       .then((res) => res.text())
-      .then((text) => {
-        console.log(text);
+      .then((randomnessSignature) => {
+        settleLottery({
+          args: [cleanData.tokenId, arrayify(randomnessSignature)],
+        });
         setLoading(false);
       });
   };
@@ -93,20 +105,24 @@ const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
     </div>
   );
 };
-const LotterPageActive = ({ totalPrice }: { totalPrice: string }) => {
-  const [value, setValue] = useState(parseFloat(totalPrice) / 2 + "");
-
-  const rawValue = parseFloat(value) / parseFloat(totalPrice);
+const LotterPageActive = ({ cleanData }: { cleanData: CleanData }) => {
+  const [value, setValue] = useState(parseFloat(cleanData.listPrice) / 2 + "");
+  const { write: enterLottery } = useContractWrite(
+    {
+      addressOrName: CollectionInfo[cleanData.collectionType].proxyAddress,
+      contractInterface: ABI,
+    },
+    "enterLottery"
+  );
+  const rawValue = parseFloat(value) / parseFloat(cleanData.listPrice);
   const pct = (rawValue * 100).toFixed(2);
 
   const showErrorText = rawValue < 0.1 || rawValue > 0.5;
 
-  // TODO: Unhardcode.
-  const minterAddress = "0x0000000000000000000000000000000000000000";
+  const minterAddress = cleanData.from;
 
-  // TODO: Add from ABI
   const onClick = () => {
-    //
+    enterLottery({ args: [cleanData.tokenId] });
   };
 
   return (
@@ -145,10 +161,7 @@ const LotterPageActive = ({ totalPrice }: { totalPrice: string }) => {
 const LotteryPageInfo = ({ cleanData }: { cleanData: CleanData }) => {
   const { data: account } = useAccount();
 
-  const totalPrice = cleanData.listPrice;
-
   const minterAddress = cleanData.from;
-
   const isOwn = account?.address === minterAddress;
 
   if (isOwn && cleanData.status === "active") {
@@ -159,7 +172,7 @@ const LotteryPageInfo = ({ cleanData }: { cleanData: CleanData }) => {
     return <LotteryPageRevealReady cleanData={cleanData} />;
   }
 
-  return <LotterPageActive totalPrice={totalPrice} />;
+  return <LotterPageActive cleanData={cleanData} />;
 };
 const LotteryPage: NextPage = () => {
   const router = useRouter();
