@@ -8,8 +8,39 @@ import ActionButton from "../../components/general/ActionButton";
 import Header from "../../components/general/Header";
 import LotteryCardPreview from "../../components/general/LotteryCardPreview";
 
-const LotteryPageInfo = () => {
-  const totalPrice = 0.1;
+const LotteryPageRevealReady = () => {
+  // TODO: Unhardcode.
+  const minterAddress = "0x0000000000000000000000000000000000000000";
+
+  const betterAddress = "0x0000000000000000000000000000000000000000";
+  // TODO: Add from ABI
+  const onClick = () => {};
+
+  return (
+    <div className="h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
+      <h1 className="font-semibold text-2xl">Lottery Info</h1>
+      <h2 className="font-medium mt-3">
+        Listed by{": "}
+        <span className="font-semibold text-red-500">
+          {minterAddress.substring(0, 6)}...
+          {minterAddress.substring(minterAddress.length - 4)}
+        </span>
+      </h2>
+      <div className="flex-grow" />
+      <p className="font-medium text-xl">
+        <span className="font-semibold text-red-500">
+          {betterAddress.substring(0, 6)}...
+          {betterAddress.substring(minterAddress.length - 4)}{" "}
+        </span>
+        has entered the other side of this lottery. Anyone can resolve the
+        lottery to see the result.
+      </p>
+      <div className="flex-grow" />
+      <ActionButton onClick={onClick} text="Reveal" disabled={false} />
+    </div>
+  );
+};
+const LotterPageActive = ({ totalPrice }: { totalPrice: number }) => {
   const [value, setValue] = useState(totalPrice / 2 + "");
 
   const rawValue = parseFloat(value) / totalPrice;
@@ -17,12 +48,20 @@ const LotteryPageInfo = () => {
 
   const showErrorText = rawValue < 0.1 || rawValue > 0.5;
 
+  // TODO: Unhardcode.
+  const minterAddress = "0x0000000000000000000000000000000000000000";
+
+  // TODO: Add from ABI
+  const onClick = () => {};
   return (
     <div className="h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
       <h1 className="font-semibold text-2xl">Lottery Info</h1>
       <h2 className="font-medium mt-3">
         Listed by{": "}
-        <span className="font-semibold text-red-500">0x31af....2002a</span>
+        <span className="font-semibold text-red-500">
+          {minterAddress.substring(0, 6)}...
+          {minterAddress.substring(minterAddress.length - 4)}
+        </span>
       </h2>
       <div className="flex-grow" />
       <p className="font-medium text-xl">You pay</p>
@@ -42,9 +81,25 @@ const LotteryPageInfo = () => {
         * The range of %'s allowed is between 10% and 50%
       </p>
       <div className="flex-grow" />
-      <ActionButton text="Enter" disabled={!!showErrorText} />
+      <ActionButton onClick={onClick} text="Enter" disabled={!!showErrorText} />
     </div>
   );
+};
+
+const LotteryPageInfo = () => {
+  // TODO: Unhardcode.
+  const totalPrice = 0.1;
+
+  // TODO: Unhardcode.
+  // const state = 'active'
+  const state = "readyToReveal";
+
+  if (state === "readyToReveal") {
+    //
+    return <LotteryPageRevealReady />;
+  }
+
+  return <LotterPageActive totalPrice={totalPrice} />;
 };
 const LotteryPage: NextPage = () => {
   const router = useRouter();
