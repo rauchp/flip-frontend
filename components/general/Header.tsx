@@ -16,7 +16,7 @@ const Anchor = ({
 
 const Header = () => {
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-between mt-4 px-3 lg:px-12">
+    <div className="flex flex-col lg:flex-row items-center justify-between h-20 px-3 lg:px-12">
       <Anchor href="/">
         <img alt="Logo" src="/assets/logo.png" className="w-36" />
       </Anchor>

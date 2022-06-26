@@ -10,6 +10,7 @@ import "@reach/dialog/styles.css";
 import { animated, useTransition } from "@react-spring/web";
 import ActionButton from "../components/general/ActionButton";
 import Glow from "../components/general/Glow";
+import { useAccount } from "wagmi";
 
 const OPTIPUNK_COLLECTION_LOGO =
   "https://quixotic.io/_next/image?url=https%3A%2F%2Ffanbase-1.s3.amazonaws.com%2Fquixotic-collection-profile%2Foptipunkgif.b34a680b_vBX64As.gif&w=3840&q=75";
@@ -26,6 +27,16 @@ function getFinalTimeStamp(hoursOffset: number) {
 function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
   const AnimatedDialogOverlay = animated(DialogOverlay);
   const AnimatedDialogContent = animated(DialogContent);
+  const [loading, setLoading] = useState(false);
+  const [errorText, setErrorText] = useState("");
+
+  const { data: account } = useAccount();
+
+  const disabled = !account || loading;
+  let buttonText = disabled ? "Connect Wallet" : "List";
+  if (loading) {
+    buttonText = "Loading...";
+  }
 
   const [showDialog, setShowDialog] = useState(false);
   const transitions = useTransition(showDialog, {
@@ -37,6 +48,26 @@ function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
   const [listPrice, setListPrice] = useState("0.1");
   const [expirtyHours, setExpirtyHours] = useState("2");
 
+  const onClick = () => {
+    setLoading(true);
+    const offset = parseInt(expirtyHours);
+    const timeStamp = getFinalTimeStamp(offset);
+
+    const price = parseFloat(listPrice);
+    setErrorText("");
+    if (!price) {
+      setErrorText("Price must be a valid number greater than 0.");
+      setLoading(false);
+      return;
+    }
+    if (offset <= 0) {
+      setErrorText("Expiry time must be a valid number greater than 0.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+  };
   return (
     <div>
       {onRender(() => setShowDialog(true))}
@@ -91,16 +122,15 @@ function Modal({ onRender, imageUrl }: { onRender: any; imageUrl: string }) {
                     </div>
                     <div className="flex-grow min-h-[4px]" />
                     <ActionButton
-                      onClick={() => {
-                        const offset = parseInt(expirtyHours);
-                        const timeStamp = getFinalTimeStamp(offset);
-                        console.log(timeStamp);
-                      }}
-                      text="List"
-                      disabled={false}
+                      onClick={onClick}
+                      text={buttonText}
+                      disabled={disabled}
                     />
                   </div>
                 </div>
+                <p className="text-lg font-medium mt-6 text-red-700">
+                  {errorText}
+                </p>
               </AnimatedDialogContent>
             </AnimatedDialogOverlay>
           )

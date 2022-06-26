@@ -18,7 +18,7 @@ const ActionButton = ({
   const style = disabled ? disabledStyle : regularStyle;
 
   return (
-    <div onClick={onClick} className={style}>
+    <div onClick={disabled ? () => {} : onClick} className={style}>
       <img alt="Sword Icon" src="/assets/sword.svg" />
       <p className="ml-1 font-bold text-white">{text}</p>
     </div>

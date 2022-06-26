@@ -4,17 +4,44 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 import ActionButton from "../../components/general/ActionButton";
 import Glow from "../../components/general/Glow";
 import Header from "../../components/general/Header";
 import LotteryCardPreview from "../../components/general/LotteryCardPreview";
 
 const SERVER_URL = "https://flip-server-production.up.railway.app/";
+
+const LotteryPageSelf = () => {
+  const onClick = () => {
+    // TODO: Add Delist Code.
+  };
+
+  return (
+    <div className="bg-white h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
+      <h1 className="font-semibold text-2xl">Lottery Info</h1>
+      <h2 className="font-medium mt-3">Listed by yourself.</h2>
+      <div className="flex-grow" />
+      <p className="font-medium text-xl">
+        No one has taken the other side of the lottery yet, so you can delist it
+        if you want.
+      </p>
+      <div className="flex-grow" />
+      <ActionButton onClick={onClick} text="Delist" disabled={false} />
+    </div>
+  );
+};
+
 const LotteryPageRevealReady = () => {
   const [loading, setLoading] = useState(false);
+  const { data: account } = useAccount();
+  const disabled = loading || !account;
 
-  const disabled = loading;
-  const buttonText = loading ? "Loading..." : "Reveal";
+  let buttonText = account ? "Reveal" : "Connect Wallet";
+  if (loading) {
+    buttonText = "Loading...";
+  }
+
   // TODO: Unhardcode.
   const minterAddress = "0x0000000000000000000000000000000000000000";
 
@@ -22,6 +49,12 @@ const LotteryPageRevealReady = () => {
   // TODO: Add from ABI
   const onClick = () => {
     setLoading(true);
+    if (!account) {
+      alert("You must have your wallet connected to reveal a lottery.");
+      setLoading(false);
+      return;
+    }
+
     fetch(SERVER_URL)
       .then((res) => res.text())
       .then((text) => {
@@ -66,7 +99,10 @@ const LotterPageActive = ({ totalPrice }: { totalPrice: number }) => {
   const minterAddress = "0x0000000000000000000000000000000000000000";
 
   // TODO: Add from ABI
-  const onClick = () => {};
+  const onClick = () => {
+    //
+  };
+
   return (
     <div className="bg-white h-[420px] p-6 my-3 mx-4 w-[380px] flex flex-col pb-6 rounded-[32px] overflow-hidden shadow-md">
       <h1 className="font-semibold text-2xl">Lottery Info</h1>
@@ -101,15 +137,26 @@ const LotterPageActive = ({ totalPrice }: { totalPrice: number }) => {
 };
 
 const LotteryPageInfo = () => {
+  const { data: account } = useAccount();
+
   // TODO: Unhardcode.
   const totalPrice = 0.1;
 
   // TODO: Unhardcode.
-  // const state = 'active'
-  const state = "readyToReveal";
+  // 'active' | 'readyToReveal'
+  const state = "active";
+
+  // TODO: Unhardcode.
+  const minterAddress = "0x0000000000000000000000000000000000000000";
+
+  const isOwn = account?.address === minterAddress;
+
+  // if (true) {
+  if (isOwn && state === "active") {
+    return <LotteryPageSelf />;
+  }
 
   if (state === "readyToReveal") {
-    //
     return <LotteryPageRevealReady />;
   }
 
@@ -126,7 +173,10 @@ const LotteryPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div className="h-full w-full min-h-screen flex items-center justify-center flex-col lg:flex-row">
+      <div
+        style={{ minHeight: "calc(100vh - 5rem)" }}
+        className="h-full w-full flex items-center justify-center flex-col lg:flex-row"
+      >
         <LotteryCardPreview
           lotteryId="2"
           imageUrl="https://quixotic.infura-ipfs.io/ipfs/QmS7rPmj3vA32ZQmixG8XEkirtFvxVWtaR1a3ZEW8KNMJf"
