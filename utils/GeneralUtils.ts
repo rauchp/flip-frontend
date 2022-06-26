@@ -9,7 +9,7 @@ const APE_IMAGE =
 export type CleanData = {
   from: string;
   bidder: string;
-  tokenId: number;
+  tokenId: string;
   itemName: string;
   timeStamp: number;
   collectionType: string;
@@ -36,7 +36,7 @@ export function convertRawDataToCleanData(rawData: any): CleanData {
     from: rawData.lister,
     bidder: rawData.bidder,
     // tokenId: rawData.tokenId,
-    tokenId: 285,
+    tokenId: "285",
     // itemName: `Apetimism ${rawData.tokenId}`,
     itemName: `Apetimism 285`,
     timeStamp: BigNumber.from(rawData.expirationTimestamp).toNumber(),

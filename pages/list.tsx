@@ -141,7 +141,7 @@ function Modal({
                       <input
                         className="bg-gray-400 px-3 py-2 rounded-xl text-center text-xl font-semibold w-16"
                         value={tokenId}
-                        onChange={(e) => setTokenId(e.target.value)}
+                        onChange={(e) => setTokenId(e.target.value as any)}
                       />
                       <p className="font-medium text-xl ml-2">Token Id</p>
                     </div>

@@ -37,7 +37,7 @@ const LotteryCardPreview = ({
   itemName: string;
   timeStamp: number;
   imageUrl: string;
-  lotteryId: number;
+  lotteryId: string;
   isClickable?: boolean;
   collectionType?: string;
   listPrice: string;

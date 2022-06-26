@@ -22,7 +22,7 @@ const Home: NextPage = () => {
       </h1>
       <h2 className="font-medium text-lg text-center self-center mt-3 max-w-sm">
         The game is simple. List an NFT for X price. Someone can try to buy it
-        for you for a % of it.
+        from you for a % of it.
         <br />
         <br />
         Either way, get paid.
