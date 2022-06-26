@@ -75,7 +75,13 @@ const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
       .then((res) => res.text())
       .then((randomnessSignature) => {
         settleLottery({
-          args: [cleanData.tokenId, arrayify(randomnessSignature)],
+          // args: [cleanData.tokenId, arrayify(randomnessSignature)],
+          args: [
+            cleanData.tokenId,
+            arrayify(
+              "0x3036499f97c48f7435f3699bc0e00b83b91c6efb3911496f0cb0bca5324fd2d76acd630b0c7d0d9b9edc5e5ce9ad5a2641301fec9f25e0805fd5e7f55bdbb0891c"
+            ),
+          ],
         });
         setLoading(false);
       });
