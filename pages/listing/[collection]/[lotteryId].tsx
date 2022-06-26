@@ -79,7 +79,7 @@ const LotteryPageRevealReady = ({ cleanData }: { cleanData: CleanData }) => {
           args: [
             cleanData.tokenId,
             arrayify(
-              "0x3036499f97c48f7435f3699bc0e00b83b91c6efb3911496f0cb0bca5324fd2d76acd630b0c7d0d9b9edc5e5ce9ad5a2641301fec9f25e0805fd5e7f55bdbb0891c"
+              "0x30acf3067e67c132ebd4f5ad0a83f12092c2bd5b48243c9e6fea781c5db79fce50176e2fec83d497f134a10e327bc5de55105ae283dfdef9f8b85917bc5b67a41c"
             ),
           ],
         });
